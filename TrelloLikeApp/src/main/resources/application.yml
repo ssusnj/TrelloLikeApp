@@ -5,7 +5,7 @@ spring:
     password: root123
   jpa:
     database-platform: org.hibernate.dialect.MySQL8InnoDBDialect
-    generate-ddl: true
+    generate-ddl: true #in production none
     show-sql: true
     hibernate:
       ddl-auto: update
