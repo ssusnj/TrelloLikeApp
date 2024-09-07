@@ -1,1 +1,8 @@
-<p>board works!</p>
+<div *ngIf="board" class="card">
+    <div class="card-body">
+        <h5>this is your boardd</h5>
+        <p class="card-text">Name: {{ board.name }}</p>
+        <p class="card-text">Description: {{ board.description }}</p>
+        <p class="card-text">Created by: {{ board.createdBy }}</p>
+    </div>
+</div>

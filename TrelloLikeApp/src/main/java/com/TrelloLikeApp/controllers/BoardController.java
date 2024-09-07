@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/boards")
+@CrossOrigin(origins = "http://localhost:4200")
 public class BoardController {
 
     private final BoardService boardService;
@@ -20,6 +21,15 @@ public class BoardController {
     public ResponseEntity<List<BoardDto>> getAllBoards() {
         var boards = boardService.getAllBoards();
         return new ResponseEntity<>(boards, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BoardDto> getBoardById(@PathVariable Long id) {
+        var board = boardService.getBoardById(id);
+//        if (board == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        } // cannot return null, should it instead of exception? try-catch?
+        return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
     @GetMapping("/users/{userId}")
@@ -32,16 +42,6 @@ public class BoardController {
     public ResponseEntity<BoardDto> createBoard(@RequestBody Board board) {
         var createdBoard = boardService.createBoard(board.getName(), board.getDescription(), board.getCreatedBy().getId());
         return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<BoardDto> getBoardById(@PathVariable Long id) {
-        var createdBoard = boardService.getBoardById(id);
-//        if (createdBoard == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        } // cannot return null, should it instead of exception? try-catch?
-        return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
-
     }
 
 }
