@@ -3,11 +3,10 @@ package com.TrelloLikeApp.services;
 import com.TrelloLikeApp.dtos.BoardDto;
 import com.TrelloLikeApp.entity.Board;
 import com.TrelloLikeApp.repositories.BoardRepository;
-import com.TrelloLikeApp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -15,26 +14,31 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final ListService listService;
 
-    public BoardDto createBoard(String name, String description, Long userId) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found")); // not possible if path variable?
-
-        var board = new Board();
-        board.setName(name);
-        board.setDescription(description);
-        board.setCreatedBy(user);
-
+    public BoardDto createBoard(String name, String description) {
+        var board = Board.builder()
+                .name(name)
+                .description(description)
+                .build();
         var createdBoard = boardRepository.save(board);
         return convertToDto(createdBoard);
     }
 
-    public List<BoardDto> getAllBoards() {
+    public BoardDto deleteBoard(Long boardId) {
+        var boardToDelete = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+
+        listService.deleteListsFromBoard(boardId);
+        boardRepository.delete(boardToDelete);
+        return convertToDto(boardToDelete);
+    }
+
+    public Set<BoardDto> getAllBoards() {
         var boards = boardRepository.findAll();
         return boards.stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public BoardDto getBoardById(Long id) {
@@ -43,21 +47,12 @@ public class BoardService {
         return convertToDto(board);
     }
 
-    public List<BoardDto> getByUserId(Long userId) {
-        // todo: check user
-        var boards = boardRepository.findAllByCreatedBy_Id(userId);
-        return boards.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
     private BoardDto convertToDto(Board board) {
         return BoardDto.builder()
                 .id(board.getId())
                 .name(board.getName())
                 .description(board.getDescription())
-                .createdBy(board.getCreatedBy().getUsername()) // todo: check if board should have setters
+                .lists(listService.getListsFromBoard(board.getId()))
                 .build();
     }
-
 }

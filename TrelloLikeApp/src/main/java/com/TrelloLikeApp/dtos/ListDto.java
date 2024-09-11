@@ -6,12 +6,10 @@ import java.util.Set;
 
 @Data
 @Builder
-public class BoardDto {
+public class ListDto {
 
     private Long id;
     private String name;
-    private String description;
-    private Set<ListDto> lists;
-    private Set<UserDto> assignedUsers;
+    private Set<CardDto> cards;
 
 }

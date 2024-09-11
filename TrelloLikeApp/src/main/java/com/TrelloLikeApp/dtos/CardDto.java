@@ -2,16 +2,14 @@ package com.TrelloLikeApp.dtos;
 
 import lombok.Builder;
 import lombok.Data;
-import java.util.Set;
 
 @Data
 @Builder
-public class BoardDto {
+public class CardDto {
 
     private Long id;
-    private String name;
+    private String title;
     private String description;
-    private Set<ListDto> lists;
-    private Set<UserDto> assignedUsers;
+    private UserDto assignedTo;
 
 }
