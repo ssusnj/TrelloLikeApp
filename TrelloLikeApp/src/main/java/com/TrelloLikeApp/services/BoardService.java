@@ -17,10 +17,9 @@ public class BoardService {
     private final ListService listService;
 
     public BoardDto createBoard(String name, String description) {
-        var board = Board.builder()
-                .name(name)
-                .description(description)
-                .build();
+        var board = new Board();
+        board.setName(name);
+        board.setDescription(description);
         var createdBoard = boardRepository.save(board);
         return convertToDto(createdBoard);
     }

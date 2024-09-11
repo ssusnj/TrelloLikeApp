@@ -21,10 +21,9 @@ public class ListService {
     public ListDto createList(String name, Long boardId) {
         var board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("Board not found."));
-        var list = List.builder()
-                .name(name)
-                .board(board)
-                .build();
+        var list = new List();
+        list.setName(name);
+        list.setBoard(board);
         var createdList = listRepository.save(list);
         return convertToDto(createdList);
     }

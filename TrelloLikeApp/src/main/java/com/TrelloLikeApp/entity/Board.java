@@ -1,12 +1,11 @@
 package com.TrelloLikeApp.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Builder
 @Entity
 public class Board {
 
@@ -17,7 +16,7 @@ public class Board {
     private String description;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<List> lists;
+    private Set<List> lists = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -25,6 +24,6 @@ public class Board {
             joinColumns = {@JoinColumn(name = "board_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private Set<User> assignedUsers;
+    private Set<User> assignedUsers = new HashSet<>();
 
   }

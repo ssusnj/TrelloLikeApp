@@ -1,12 +1,12 @@
 package com.TrelloLikeApp.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Builder
 @Entity
 public class List {
 
@@ -20,5 +20,5 @@ public class List {
     private Board board;
 
     @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Card> cards;
+    private Set<Card> cards = new HashSet<>();
 }

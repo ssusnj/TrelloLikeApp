@@ -20,10 +20,9 @@ public class CardService {
     public CardDto createCardTitle(String title, Long listId) {
         var list =  listRepository.findById(listId)
                 .orElseThrow(() -> new RuntimeException("List not found."));
-        var card = Card.builder()
-                .title(title)
-                .list(list)
-                .build();
+        var card = new Card();
+        card.setTitle(title);
+        card.setList(list);
         var createdCard = cardRepository.save(card);
         return convertToDto(createdCard);
     }
@@ -32,7 +31,7 @@ public class CardService {
         var list =  listRepository.findById(listId)
                 .orElseThrow(() -> new RuntimeException("List not found."));
         var cardToUpdate = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found."));;
+                .orElseThrow(() -> new RuntimeException("Card not found."));
         cardToUpdate.setTitle(title == null ? cardToUpdate.getTitle() : title);
         cardToUpdate.setDescription(description);
         cardToUpdate.setList(list);
