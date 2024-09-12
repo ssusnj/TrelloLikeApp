@@ -43,11 +43,12 @@ public class ListService {
         listRepository.deleteAll(boardLists);
     }
 
-    public void deleteList(Long listId) {
+    public ListDto deleteList(Long listId) {
         var listToDelete = listRepository.findById(listId)
                 .orElseThrow(() -> new RuntimeException("List not found"));
         cardService.deleteCardsFromList(listId);
         listRepository.delete(listToDelete);
+        return convertToDto(listToDelete);
     }
 
     private ListDto convertToDto(List list) {

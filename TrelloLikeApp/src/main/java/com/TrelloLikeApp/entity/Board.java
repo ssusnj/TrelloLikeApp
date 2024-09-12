@@ -18,12 +18,7 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<List> lists = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name="board_user",
-            joinColumns = {@JoinColumn(name = "board_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")}
-    )
-    private Set<User> assignedUsers = new HashSet<>();
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User createdBy;
   }

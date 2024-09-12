@@ -3,14 +3,13 @@ package com.TrelloLikeApp.dtos;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @Builder
-public class UserDto {
-
+@Data
+public class RegisterDto {
     private Long id;
     private String firstname;
     private String lastname;
     private String username;
-    private String token;
+    private String password;
 
 }

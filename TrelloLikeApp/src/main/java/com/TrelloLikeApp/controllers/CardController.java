@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/boards/{boardId}/{listId}")
+@RequestMapping("/api/boards/{username}/{boardId}/{listId}")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CardController {
 
     private final CardService cardService;
 
     @PutMapping("/{cardId}")
-    public ResponseEntity<CardDto> populateCard(@PathVariable Long listId, @PathVariable Long cardId,@RequestBody CardDto card) {
+    public ResponseEntity<CardDto> populateCard(@PathVariable Long listId, @PathVariable Long cardId, @RequestBody CardDto card) {
         var createdCard = cardService.updateCard(cardId, card.getTitle(), card.getDescription(), listId);
         return new ResponseEntity<>(createdCard, HttpStatus.OK);
     }

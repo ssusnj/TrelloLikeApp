@@ -34,8 +34,9 @@ public class UserAuthProvider {
                 .withIssuer(userDto.getUsername())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
+                .withClaim("firstname", userDto.getFirstname())
+                .withClaim("lastname", userDto.getLastname())
                 .withClaim("username", userDto.getUsername())
-                .withClaim("role", userDto.getRole())
                 .sign(Algorithm.HMAC256(secretKey));
     }
 
@@ -45,12 +46,11 @@ public class UserAuthProvider {
         var decodedJWT = verifier.verify(token);
 
         var user = UserDto.builder()
+                .firstname(decodedJWT.getClaim("firstname").asString())
+                .lastname(decodedJWT.getClaim("lastname").asString())
                 .username(decodedJWT.getIssuer())
-                .role(decodedJWT.getClaim("role").asString())
-                // todo: add all fields?
                 .build();
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-        // todo: if rules then last one user authorities?
     }
 }

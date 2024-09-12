@@ -17,7 +17,4 @@ public class Card {
     @JoinColumn(name = "list_id")
     private List list;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User assignedUser;
 }

@@ -15,11 +15,13 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final ListService listService;
+    private final UserService userService;
 
-    public BoardDto createBoard(String name, String description) {
+    public BoardDto createBoard(String username, BoardDto boardDto) {
         var board = new Board();
-        board.setName(name);
-        board.setDescription(description);
+        board.setName(boardDto.getName());
+        board.setDescription(boardDto.getDescription());
+        board.setCreatedBy(userService.getUserByUsername(username));
         var createdBoard = boardRepository.save(board);
         return convertToDto(createdBoard);
     }
@@ -33,8 +35,8 @@ public class BoardService {
         return convertToDto(boardToDelete);
     }
 
-    public Set<BoardDto> getAllBoards() {
-        var boards = boardRepository.findAll();
+    public Set<BoardDto> getAllBoardsForUser(Long userId) {
+        var boards = boardRepository.findAllByCreatedBy_Id(userId);
         return boards.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toSet());
@@ -51,6 +53,7 @@ public class BoardService {
                 .id(board.getId())
                 .name(board.getName())
                 .description(board.getDescription())
+                .createdBy(userService.getUserById(board.getCreatedBy().getId()))
                 .lists(listService.getListsFromBoard(board.getId()))
                 .build();
     }

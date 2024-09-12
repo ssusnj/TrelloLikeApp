@@ -10,6 +10,4 @@ public class CardDto {
     private Long id;
     private String title;
     private String description;
-    private UserDto assignedTo;
-
 }
