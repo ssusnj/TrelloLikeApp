@@ -31,8 +31,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .anyRequest().authenticated());
-              //  .formLogin(Customizer.withDefaults())
-              //  .httpBasic(withDefaults()); todo: check these
         return http.build();
     }
 

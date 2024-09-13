@@ -4,8 +4,10 @@ import com.backend.dtos.CredentialsDto;
 import com.backend.dtos.RegisterDto;
 import com.backend.dtos.UserDto;
 import com.backend.entity.User;
+import com.backend.exceptions.AppException;
 import com.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +22,17 @@ public class UserService {
 
     public UserDto login(CredentialsDto credentials) {
         var user = userRepository.findByUsername(credentials.username())
-                .orElseThrow(() -> new RuntimeException("No user with username: " + credentials.username()));
+                .orElseThrow(() -> new AppException("No user with username: " + credentials.username(), HttpStatus.BAD_REQUEST));
         if (passwordEncoder.matches(CharBuffer.wrap(credentials.password()), user.getPassword())) {
             return convertToDto(user);
         }
-        throw new RuntimeException("Invalid password");
+        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
     public UserDto register(RegisterDto userDto) {
         var optionalUser = userRepository.findByUsername(userDto.getUsername());
         if (optionalUser.isPresent()) {
-                throw new RuntimeException("Username already exists!"); // bad request
+                throw new AppException("Username already exists!", HttpStatus.BAD_REQUEST);
         }
         User user = new User();
         user.setFirstName(userDto.getFirstname());
@@ -43,13 +45,13 @@ public class UserService {
 
     public UserDto getUserById(Long id) {
         var user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
         return convertToDto(user);
     }
 
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User " + username + " not found"));
+                .orElseThrow(() -> new AppException("User " + username + " not found", HttpStatus.NOT_FOUND));
     }
 
     private UserDto convertToDto(User user) {

@@ -2,9 +2,11 @@ package com.backend.services;
 
 import com.backend.dtos.ListDto;
 import com.backend.entity.List;
+import com.backend.exceptions.AppException;
 import com.backend.repositories.BoardRepository;
 import com.backend.repositories.ListRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -20,7 +22,7 @@ public class ListService {
 
     public ListDto createList(String name, Long boardId) {
         var board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new AppException("Board not found.", HttpStatus.NOT_FOUND));
         var list = new List();
         list.setName(name);
         list.setBoard(board);
@@ -30,7 +32,7 @@ public class ListService {
 
     public Set<ListDto> getListsFromBoard(Long boardId) {
         var lists =  listRepository.findAllByBoard_Id(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new AppException("Board not found.", HttpStatus.NOT_FOUND));
         return lists.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toSet());
@@ -38,14 +40,14 @@ public class ListService {
 
     public void deleteListsFromBoard(Long boardId) {
         var boardLists = listRepository.findAllByBoard_Id(boardId)
-                .orElseThrow(() -> new RuntimeException("Lists not found."));
+                .orElseThrow(() -> new AppException("Lists not found.", HttpStatus.NOT_FOUND));
         boardLists.stream().map(List::getId).forEach(cardService::deleteCardsFromList);
         listRepository.deleteAll(boardLists);
     }
 
     public ListDto deleteList(Long listId) {
         var listToDelete = listRepository.findById(listId)
-                .orElseThrow(() -> new RuntimeException("List not found"));
+                .orElseThrow(() -> new AppException("List not found", HttpStatus.NOT_FOUND));
         cardService.deleteCardsFromList(listId);
         listRepository.delete(listToDelete);
         return convertToDto(listToDelete);

@@ -2,8 +2,10 @@ package com.backend.services;
 
 import com.backend.dtos.BoardDto;
 import com.backend.entity.Board;
+import com.backend.exceptions.AppException;
 import com.backend.repositories.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -28,7 +30,7 @@ public class BoardService {
 
     public BoardDto deleteBoard(Long boardId) {
         var boardToDelete = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found"));
+                .orElseThrow(() -> new AppException("Board not found", HttpStatus.NOT_FOUND));
 
         listService.deleteListsFromBoard(boardId);
         boardRepository.delete(boardToDelete);
@@ -44,7 +46,7 @@ public class BoardService {
 
     public BoardDto getBoardById(Long id) {
         var board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new AppException("Board not found.", HttpStatus.NOT_FOUND));
         return convertToDto(board);
     }
 

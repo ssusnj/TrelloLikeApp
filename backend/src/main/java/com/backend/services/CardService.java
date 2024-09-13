@@ -2,9 +2,11 @@ package com.backend.services;
 
 import com.backend.dtos.CardDto;
 import com.backend.entity.Card;
+import com.backend.exceptions.AppException;
 import com.backend.repositories.CardRepository;
 import com.backend.repositories.ListRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -19,7 +21,7 @@ public class CardService {
 
     public CardDto createCardTitle(String title, Long listId) {
         var list =  listRepository.findById(listId)
-                .orElseThrow(() -> new RuntimeException("List not found."));
+                .orElseThrow(() -> new AppException("List not found.", HttpStatus.NOT_FOUND));
         var card = new Card();
         card.setTitle(title);
         card.setList(list);
@@ -29,9 +31,9 @@ public class CardService {
 
     public CardDto updateCard(Long cardId, String title, String description, Long listId) {
         var list =  listRepository.findById(listId)
-                .orElseThrow(() -> new RuntimeException("List not found."));
+                .orElseThrow(() -> new AppException("List not found.", HttpStatus.NOT_FOUND));
         var cardToUpdate = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found."));
+                .orElseThrow(() -> new AppException("Card not found.", HttpStatus.NOT_FOUND));
         cardToUpdate.setTitle(title == null ? cardToUpdate.getTitle() : title);
         cardToUpdate.setDescription(description);
         cardToUpdate.setList(list);
@@ -41,7 +43,7 @@ public class CardService {
 
     public Set<CardDto> getCardsFromList(Long listId) {
         var cards = cardRepository.findAllByList_Id(listId)
-                .orElseThrow(() -> new RuntimeException("List not found."));
+                .orElseThrow(() -> new AppException("List not found.", HttpStatus.NOT_FOUND));
         return cards.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toSet());
@@ -53,7 +55,7 @@ public class CardService {
 
     public CardDto deleteCard(Long cardId) {
         var cardToDelete = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found."));
+                .orElseThrow(() -> new AppException("Card not found.", HttpStatus.NOT_FOUND));
         cardRepository.delete(cardToDelete);
         return convertToDto(cardToDelete);
     }
