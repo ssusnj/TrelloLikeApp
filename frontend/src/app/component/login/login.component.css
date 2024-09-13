@@ -1,0 +1,48 @@
+.col-12.col-md-6.col-lg-4 {
+  max-width: 350px;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.nav-pills .nav-link {
+  color: #800080;
+  padding: 0.5rem 1rem;
+  width: 100px;
+  text-align: center;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #d8bfea;
+}
+
+.form-outline {
+  margin-top: 1.5rem;
+}
+
+.btn-light {
+  background-color: #d8bfea;
+  border-color: #d8bfea;
+  color: #800080;
+}
+
+.btn-light:hover {
+  background-color: #e3d7ff;
+  border-color: #e3d7ff;
+  color: #800080;
+}
+
+.form-control {
+  max-width: 100%;
+  width: 100%;
+}

@@ -1,19 +1,32 @@
-<table *ngIf="boardResponses" class="table table-striped">
-    <thead class="table-light">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">NAME</th>
-            <th scope="col">CREATED BY</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let board of boardResponses; let i = index">
-            <td>{{board.id}}</td>
-            <td>{{board.name}}</td>
-            <td>{{board.createdBy}}</td>
-            <td>
-                <button [routerLink]="[board.id]" type="button" class="button btn btn-primary">View</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container mt-5">
+    <h2>Hello, {{username}}!</h2>
+    <hr>
+    <div class="board-container">
+        <div *ngFor="let board of boards" (click)="onNavigateToBoard(board.id)" class="board-card">
+            <div class="board-content">
+                <h5>{{board.name}}</h5>
+            </div>
+        </div>
+        <div class="board-card add-new" (click)="showForm = true">
+            <div class="board-content">
+                <h5>+ Add new board</h5>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="showForm" class="modal">
+        <div class="modal-content">
+            <form (ngSubmit)="onCreateBoard()">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" [(ngModel)]="newBoard.name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" class="form-control" id="description" [(ngModel)]="newBoard.description" name="description" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" (click)="showForm = false">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

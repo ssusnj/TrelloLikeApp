@@ -22,8 +22,8 @@ public class CardController {
     }
 
     @DeleteMapping("/{cardId}")
-    public ResponseEntity<CardDto> removeCardFromList(@PathVariable Long listId, @PathVariable Long cardId) {
-        CardDto cartDto = cardService.deleteCard(listId, cardId);
+    public ResponseEntity<CardDto> removeCardFromList(@PathVariable Long cardId) {
+        CardDto cartDto = cardService.deleteCard(cardId);
         return ResponseEntity.ok().body(cartDto);
     }
 }

@@ -1,8 +1,80 @@
-<div *ngIf="board" class="card">
-    <div class="card-body">
-        <h5>this is your boardd</h5>
-        <p class="card-text">Name: {{ board.name }}</p>
-        <p class="card-text">Description: {{ board.description }}</p>
-        <p class="card-text">Created by: {{ board.createdBy }}</p>
+<div class="container mt-5">
+    <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="mb-3">{{ board.name }}</h3>
+            <a class="nav-link text-grey" (click)="onDeleteBoard()">Delete Board</a>
+        </div>
+        <p class="card-text">{{ board.description }}</p>
+        <hr>
+        <div class="board-container">
+            <div class="d-flex flex-nowrap">
+                <div *ngFor="let list of board.lists || []" class="board-list mr-3">
+                    <div class="card add-new">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">{{ list.name }}</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-link p-0" type="button" (click)="onToggleDropdown(list.id)">…</button>
+                                    <ul class="dropdown-menu" [class.show]="dropdownOpenId === list.id">
+                                    <li><a class="dropdown-item small text-danger" (click)="onDeleteList(list.id)">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div *ngFor="let card of list.cards || []" class="card mt-2" (click)="onOpenEditCard(card)">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ card.title }}</h6>
+                                </div>
+                            </div>
+                            <div *ngIf="showCardFormId === list.id" class="form-container mt-2">
+                                <form (ngSubmit)="onAddCardToList(list.id)">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Enter a name for this card..." [(ngModel)]="newCard.title" name="cardName" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Add card</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="showCardFormId = null">Cancel</button>
+                                </form>
+                            </div>
+                            <button *ngIf="showCardFormId !== list.id" type="button" class="btn btn-sm" (click)="showCardFormId = list.id">+ Add card</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="board-list mr-3">
+                    <div class="card add-new">
+                        <div class="card-body">
+                            <div *ngIf="!showListForm" (click)="showListForm = true" class="d-flex justify-content-between align-items-center" >
+                                <h6 style="color: rgb(0, 0, 0)">+ Add new list</h6>
+                            </div>
+                            <div *ngIf="showListForm" class="form-container mt-2">
+                                <form (ngSubmit)="onAddList()">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Enter list name..." [(ngModel)]="newList.name" name="listName" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Add list</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="showListForm = false">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
-</div>
+    <div class="modal" tabindex="-1" [class.show]="showEditCardForm" *ngIf="showEditCardForm">
+        <div class="modal-content">
+            <form (ngSubmit)="onEditCard()">
+                <div class="mb-3">
+                    <label for="cardTitle" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="cardTitle" [(ngModel)]="selectedCard.title" name="cardTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cardDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="cardDescription" [(ngModel)]="selectedCard.description" name="cardDescription" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" (click)="showEditCardForm = false">Cancel</button>
+                <button type="button" class="btn btn-secondary" (click)="onDeleteCard()">Delete</button>
+            </form>
+       </div>
+    </div>
+</div>  

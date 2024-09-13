@@ -51,7 +51,7 @@ public class CardService {
         cardRepository.deleteAllByList_Id(listId);
     }
 
-    public CardDto deleteCard(Long listId, Long cardId) {
+    public CardDto deleteCard(Long cardId) {
         var cardToDelete = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found."));
         cardRepository.delete(cardToDelete);

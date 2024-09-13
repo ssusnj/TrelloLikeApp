@@ -1,0 +1,32 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #800080; 
+  color: white;
+}
+
+.app-name {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.auth-buttons button {
+  background-color: white;
+  color: #800080; 
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.auth-buttons button:hover {
+  background-color: #b19cd9;
+  color: white;
+}
+
+body {
+  background-color: #e3d7ff; 
+}

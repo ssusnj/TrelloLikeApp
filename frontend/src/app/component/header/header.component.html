@@ -1,0 +1,8 @@
+<nav class="navbar">
+	<span class="app-name">Trello App</span>
+	<div class="auth-buttons">
+		<button *ngIf="authService.isLoggedIn()" (click)="logout()">Sign Out</button>
+	  	<button *ngIf="!authService.isLoggedIn()" (click)="navigateToLogin()">Sign In</button>
+	</div>
+</nav>
+  

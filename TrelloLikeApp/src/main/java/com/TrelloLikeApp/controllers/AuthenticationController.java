@@ -20,7 +20,7 @@ public class AuthenticationController {
     private final UserAuthProvider userAuthProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@Valid @RequestBody CredentialsDto credentials) { // todo: add @Valid
+    public ResponseEntity<UserDto> login(@Valid @RequestBody CredentialsDto credentials) {
         var userDto = userService.login(credentials);
         userDto.setToken(userAuthProvider.createToken(userDto));
         return new ResponseEntity<>(userDto, HttpStatus.OK);
