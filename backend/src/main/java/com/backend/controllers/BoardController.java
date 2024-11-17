@@ -27,7 +27,6 @@ public class BoardController {
     }
 
     @PostMapping()
-    @Transactional
     public ResponseEntity<BoardDto> createBoard(@PathVariable String username, @RequestBody BoardDto board) {
         var createdBoard = boardService.createBoard(username, board);
         return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
